@@ -1,30 +1,45 @@
-echo "Creating your @angular component $2 namaed $1 with .ts extension"
+#!/bin/bash
 
-TEXT = ''
+echo "Creating your @angular component named $1 with .ts extension"
+
+
+TEXT_COMP=$"import {Component} from '@angular/core' "
+
 echo "Do you wish to install this program?"
-select yn in "component" "Directive" "Service" "pipe"; do
+
+select yn in "component" "Directive" "pipe" "injectable/services"; do
     case $yn in
-        component ) echo 'good'; break;;
+        component ) break;;
         Directive ) break ;;
 	Service ) break;;
 	pipe ) break;;
+	injectable/services ) 
+
+		TEXT_COMP+=$"import { Injectable } from '@angular/core'; 
+			import 'rxjs/add/operator/map';
+                       import 'rxjs/add/operator/catch';
+                        
+                        @Injectable() ";
+	break;;
     esac
 done
 
 echo "$yn"
 
-echo "import {Component} from '@angular/core'
+TEXT_COMP+="
 
 @Component({
-  selector:\"jrny-login\",
-  template: \`<h1>Logging </h1>\`,
+  selector:\"demo\",
+  template: \`<h1>demo</h1>\`,
   directives: [],
   providers: []
 })
 
 export class $1 {
   constructor(){}
-}" > "$1.ts"
+}" 
+
+echo $TEXT_COMP > "$1.ts"
 
 
 echo "file successfully create"
